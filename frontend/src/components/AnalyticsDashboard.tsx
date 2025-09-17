@@ -185,6 +185,53 @@ const AssemblyLineChart = ({ lineNumber, data, isLoading }) => (
   </Card>
 );
 
+const StatsOverview = ({ stats, isLoading }) => (
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
+    <div className="grid grid-cols-4 divide-x">
+      <div className="px-8 py-6">
+        <p className="text-sm font-medium text-gray-500">Total Packets</p>
+        <p className="mt-2 text-3xl font-semibold text-gray-900">
+          {isLoading ? (
+            <div className="h-9 bg-gray-200 animate-pulse rounded w-24" />
+          ) : (
+            stats.totalPackets.toLocaleString()
+          )}
+        </p>
+      </div>
+      <div className="px-8 py-6">
+        <p className="text-sm font-medium text-gray-500">Active Lines</p>
+        <p className="mt-2 text-3xl font-semibold text-gray-900">
+          {isLoading ? (
+            <div className="h-9 bg-gray-200 animate-pulse rounded w-8" />
+          ) : (
+            stats.activeLines
+          )}
+        </p>
+      </div>
+      <div className="px-8 py-6">
+        <p className="text-sm font-medium text-gray-500">Total Trays</p>
+        <p className="mt-2 text-3xl font-semibold text-gray-900">
+          {isLoading ? (
+            <div className="h-9 bg-gray-200 animate-pulse rounded w-8" />
+          ) : (
+            stats.totalTrays
+          )}
+        </p>
+      </div>
+      <div className="px-8 py-6">
+        <p className="text-sm font-medium text-gray-500">Utilization</p>
+        <p className="mt-2 text-3xl font-semibold text-gray-900">
+          {isLoading ? (
+            <div className="h-9 bg-gray-200 animate-pulse rounded w-16" />
+          ) : (
+            `${stats.capacityUtilization}%`
+          )}
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
 export default function AnalyticsDashboard() {
   const [opticalData, setOpticalData] = useState<OpticalCountData[]>([]);
   const [trayData, setTrayData] = useState<TrayData[]>([]);
@@ -382,6 +429,13 @@ export default function AnalyticsDashboard() {
   const capacityUtilization =
     hourlyTrayData.length > 0 ? Math.round((avgTraysPerHour / 150) * 100) : 0;
 
+  const stats = {
+    totalPackets: totalPacketsToday,
+    activeLines,
+    totalTrays,
+    capacityUtilization,
+  };
+
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 flex items-center justify-center">
@@ -405,58 +459,48 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Bamul Production Analytics
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Real-time monitoring of milk packaging operations
-            </p>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Clock className="h-4 w-4" />
-            Last updated: {currentTime.toLocaleTimeString()}
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Banner */}
+      <div className="relative bg-gradient-to-r from-rose-200 via-red-100 to-red-50 dark:from-gray-800 dark:via-red-900/20 dark:to-gray-800">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="px-8 pt-8 pb-28">
+            <div className="flex items-center justify-between mb-12">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-lg bg-red-500 flex items-center justify-center">
+                  <span className="text-white text-xl font-bold">A</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
+                <Clock className="h-4 w-4 text-gray-600" />
+                <span className="text-gray-600">
+                  Last updated: {currentTime.toLocaleTimeString()}
+                </span>
+              </div>
+            </div>
+            <div className="text-center max-w-2xl mx-auto">
+              <h1 className="text-3xl font-semibold text-gray-900 mb-2">
+                Good morning, Team!
+              </h1>
+              <p className="text-gray-600">
+                Explore your team's latest production metrics to see how you're
+                driving results.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Total Packets Today"
-            value={totalPacketsToday}
-            icon={Package}
-            description="Across all assembly lines"
-            isLoading={isLoading}
-          />
-          <StatCard
-            title="Active Assembly Lines"
-            value={activeLines}
-            icon={Activity}
-            description={`${activeLines} lines operational`}
-            isLoading={isLoading}
-          />
-          <StatCard
-            title="Total Trays"
-            value={totalTrays}
-            icon={Layers}
-            description="Processed today"
-            isLoading={isLoading}
-          />
-          <StatCard
-            title="Capacity Utilization"
-            value={`${capacityUtilization}%`}
-            icon={TrendingUp}
-            description="Tray production efficiency"
-            isLoading={isLoading}
-          />
+        {/* Overlapping Stats Card */}
+        <div className="absolute left-0 right-0 -bottom-16">
+          <div className="max-w-[1440px] mx-auto px-8">
+            <StatsOverview stats={stats} isLoading={isLoading} />
+          </div>
         </div>
+      </div>
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
+      {/* Main Content */}
+      <div className="max-w-[1440px] mx-auto px-8 pt-28 pb-8">
+        <Tabs defaultValue="overview" className="space-y-8">
+          <TabsList className="bg-white p-1 rounded-lg shadow-sm">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="lines">Assembly Lines</TabsTrigger>
             <TabsTrigger value="packets">Packet Types</TabsTrigger>
