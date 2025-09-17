@@ -1,0 +1,214 @@
+{
+  "id": "07d3d211-a83b-4a5f-931f-e7cd53e3df39",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "tabOpticalCount": {
+      "name": "tabOpticalCount",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "varchar(140)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creation": {
+          "name": "creation",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified": {
+          "name": "modified",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "docstatus": {
+          "name": "docstatus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "idx": {
+          "name": "idx",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "assembly_line": {
+          "name": "assembly_line",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "machine_id": {
+          "name": "machine_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from_time": {
+          "name": "from_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to_time": {
+          "name": "to_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "counted_packets": {
+          "name": "counted_packets",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tabTrays": {
+      "name": "tabTrays",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "varchar(140)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creation": {
+          "name": "creation",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified": {
+          "name": "modified",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "docstatus": {
+          "name": "docstatus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "idx": {
+          "name": "idx",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "amended_from": {
+          "name": "amended_from",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "_user_tags": {
+          "name": "_user_tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "_comments": {
+          "name": "_comments",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "_assign": {
+          "name": "_assign",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "_liked_by": {
+          "name": "_liked_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "convery id": {
+          "name": "convery id",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trayid": {
+          "name": "trayid",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trayimage": {
+          "name": "trayimage",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "packetsnumber": {
+          "name": "packetsnumber",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "packettype": {
+          "name": "packettype",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
