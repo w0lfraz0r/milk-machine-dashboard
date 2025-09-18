@@ -1,49 +1,40 @@
-import {
-  pgTable,
-  varchar,
-  timestamp,
-  integer,
-  text,
-} from "drizzle-orm/pg-core";
+import { mysqlTable, varchar, timestamp, int, text } from "drizzle-orm/mysql-core";
 
-// tabTrays table schema
-export const tabTrays = pgTable("tabTrays", {
+export const tabTrays = mysqlTable("tabTrays", {
   name: varchar("name", { length: 140 }).primaryKey().notNull(),
-  creation: timestamp("creation", { mode: "string", precision: 6 }),
-  modified: timestamp("modified", { mode: "string", precision: 6 }),
+  creation: timestamp("creation"),
+  modified: timestamp("modified"),
   modifiedBy: varchar("modified_by", { length: 140 }),
   owner: varchar("owner", { length: 140 }),
-  docstatus: integer("docstatus").notNull().default(0),
-  idx: integer("idx").notNull().default(0),
+  docstatus: int("docstatus").notNull().default(0),
+  idx: int("idx").notNull().default(0),
   amendedFrom: varchar("amended_from", { length: 140 }),
   userTags: text("_user_tags"),
   comments: text("_comments"),
   assign: text("_assign"),
   likedBy: text("_liked_by"),
-  converyId: varchar("convery id", { length: 140 }), // Note: space in column name as per your schema
+  converyId: varchar("convery id", { length: 140 }),
   trayid: varchar("trayid", { length: 140 }),
   trayimage: varchar("trayimage", { length: 140 }),
-  packetsnumber: integer("packetsnumber").notNull().default(0),
+  packetsnumber: int("packetsnumber").notNull().default(0),
   packettype: varchar("packettype", { length: 140 }),
 });
 
-// tabOpticalCount table schema
-export const tabOpticalCount = pgTable("tabOpticalCount", {
+export const tabOpticalCount = mysqlTable("tabOpticalCount", {
   name: varchar("name", { length: 140 }).primaryKey().notNull(),
-  creation: timestamp("creation", { mode: "string", precision: 6 }),
-  modified: timestamp("modified", { mode: "string", precision: 6 }),
+  creation: timestamp("creation"),
+  modified: timestamp("modified"),
   modifiedBy: varchar("modified_by", { length: 140 }),
   owner: varchar("owner", { length: 140 }),
-  docstatus: integer("docstatus").notNull().default(0),
-  idx: integer("idx").notNull().default(0),
-  assemblyLine: integer("assembly_line"),
-  machineId: integer("machine_id"),
-  fromTime: timestamp("from_time", { mode: "string", precision: 6 }),
-  toTime: timestamp("to_time", { mode: "string", precision: 6 }),
-  countedPackets: integer("counted_packets"),
+  docstatus: int("docstatus").notNull().default(0),
+  idx: int("idx").notNull().default(0),
+  assemblyLine: int("assembly_line"),
+  machineId: int("machine_id"),
+  fromTime: timestamp("from_time"),
+  toTime: timestamp("to_time"),
+  countedPackets: int("counted_packets"),
 });
 
-// Type exports for TypeScript
 export type TraySelect = typeof tabTrays.$inferSelect;
 export type TrayInsert = typeof tabTrays.$inferInsert;
 export type OpticalCountSelect = typeof tabOpticalCount.$inferSelect;

@@ -9,9 +9,9 @@
     "dev:watch": "nodemon",
     "build": "tsc",
     "start": "node dist/server.js",
-    "db:push": "drizzle-kit push:pg",
+    "db:push": "drizzle-kit push:mysql",
     "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate:pg",
+    "db:generate": "drizzle-kit generate:mysql",
     "db:migrate": "npx tsx src/db/migrate.ts",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
@@ -21,7 +21,7 @@
     "express",
     "typescript",
     "drizzle",
-    "pg",
+    "mysql",
     "analytics"
   ],
   "author": "Your Name",
@@ -31,8 +31,7 @@
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
     "express": "^4.18.2",
-    "pg": "^8.16.3",
-    "postgres": "^3.4.7"
+    "mysql2": "^3.6.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

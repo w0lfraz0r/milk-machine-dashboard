@@ -1,5 +1,6 @@
 import { db } from "./connection";
 import { tabTrays, tabOpticalCount } from "./schema";
+import { sql } from "drizzle-orm";
 
 async function seed() {
   try {
@@ -10,13 +11,13 @@ async function seed() {
     const generateTimestamp = (hour: number) => {
       const date = new Date(startOfDay);
       date.setHours(hour);
-      return date.toISOString();
+      return date;
     };
 
     // Sample tray data across different hours
     const trays = Array.from({ length: 20 }).map((_, index) => ({
       name: `TRAY-${(index + 1).toString().padStart(3, "0")}`,
-      creation: generateTimestamp(Math.floor(index / 2)), // Distribute across hours
+      creation: generateTimestamp(Math.floor(index / 2)),
       modified: generateTimestamp(Math.floor(index / 2)),
       modifiedBy: "system",
       owner: "system",
@@ -54,7 +55,7 @@ async function seed() {
 
     console.log("🌱 Starting seed...");
 
-    // Clear existing data
+    // Clear existing data using MySQL syntax
     await db.delete(tabTrays);
     await db.delete(tabOpticalCount);
 

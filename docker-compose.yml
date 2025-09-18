@@ -1,14 +1,15 @@
 services:
-  postgres:
-    image: postgres:14
+  mysql:
+    image: mysql:8.0
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password123
-      POSTGRES_DB: dashboard_db
+      MYSQL_ROOT_PASSWORD: password123
+      MYSQL_DATABASE: dashboard_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password123
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  postgres_data:
+  mysql_data:

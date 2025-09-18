@@ -1,214 +1,254 @@
 {
-  "id": "07d3d211-a83b-4a5f-931f-e7cd53e3df39",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
-  "dialect": "pg",
+  "dialect": "mysql",
+  "id": "166512b0-83c2-461f-979c-c37802e7c5c0",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "tabOpticalCount": {
       "name": "tabOpticalCount",
-      "schema": "",
       "columns": {
         "name": {
           "name": "name",
           "type": "varchar(140)",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "creation": {
           "name": "creation",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "modified": {
           "name": "modified",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "modified_by": {
           "name": "modified_by",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "owner": {
           "name": "owner",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "docstatus": {
           "name": "docstatus",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
           "default": 0
         },
         "idx": {
           "name": "idx",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
           "default": 0
         },
         "assembly_line": {
           "name": "assembly_line",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "machine_id": {
           "name": "machine_id",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "from_time": {
           "name": "from_time",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "to_time": {
           "name": "to_time",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "counted_packets": {
           "name": "counted_packets",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "tabOpticalCount_name": {
+          "name": "tabOpticalCount_name",
+          "columns": [
+            "name"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "tabTrays": {
       "name": "tabTrays",
-      "schema": "",
       "columns": {
         "name": {
           "name": "name",
           "type": "varchar(140)",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "creation": {
           "name": "creation",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "modified": {
           "name": "modified",
-          "type": "timestamp(6)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "modified_by": {
           "name": "modified_by",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "owner": {
           "name": "owner",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "docstatus": {
           "name": "docstatus",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
           "default": 0
         },
         "idx": {
           "name": "idx",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
           "default": 0
         },
         "amended_from": {
           "name": "amended_from",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "_user_tags": {
           "name": "_user_tags",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "_comments": {
           "name": "_comments",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "_assign": {
           "name": "_assign",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "_liked_by": {
           "name": "_liked_by",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "convery id": {
           "name": "convery id",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "trayid": {
           "name": "trayid",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "trayimage": {
           "name": "trayimage",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "packetsnumber": {
           "name": "packetsnumber",
-          "type": "integer",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false,
           "default": 0
         },
         "packettype": {
           "name": "packettype",
           "type": "varchar(140)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "tabTrays_name": {
+          "name": "tabTrays_name",
+          "columns": [
+            "name"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
   }
 }
