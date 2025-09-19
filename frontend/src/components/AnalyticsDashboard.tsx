@@ -21,6 +21,7 @@ import {
   Legend,
   AreaChart,
   Area,
+  Cell,
 } from "recharts";
 import {
   Activity,
@@ -545,18 +546,18 @@ export default function AnalyticsDashboard() {
                           boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                         }}
                       />
-                      <Bar
-                        dataKey="count"
-                        radius={[4, 4, 0, 0]}
-                        fill="#3b82f6"
-                      />
+                      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                        {packetTypesData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 )}
               </CardContent>
             </Card>
 
-                        {/* Packet Types Summary Cards */}
+            {/* Packet Types Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {isLoading
                 ? Array.from({ length: 3 }, (_, i) => (
@@ -589,7 +590,7 @@ export default function AnalyticsDashboard() {
                   </Card>
                 ))}
             </div>
-            
+
             {/* Overall Production Line Chart */}
             <Card className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
