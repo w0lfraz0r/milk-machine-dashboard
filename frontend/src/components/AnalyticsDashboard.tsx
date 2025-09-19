@@ -345,13 +345,14 @@ export default function AnalyticsDashboard() {
 
     fetchAllData();
 
+    // polling commented for now
     // Set up auto-refresh every 30 seconds
-    const interval = setInterval(() => {
-      fetchAllData();
-      setCurrentTime(new Date());
-    }, 30000);
+    // const interval = setInterval(() => {
+    //   fetchAllData();
+    //   setCurrentTime(new Date());
+    // }, 30000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   // Process data when raw data changes
@@ -444,7 +445,7 @@ export default function AnalyticsDashboard() {
         {/* Overlapping Stats Card */}
         <div className="absolute left-0 right-0 -bottom-16">
           <div className="max-w-[1440px] mx-auto px-8">
-            <StatsOverview stats={stats} isLoading={isLoading} />
+            <StatsOverview />
           </div>
         </div>
       </div>
