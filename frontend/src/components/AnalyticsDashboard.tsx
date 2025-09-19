@@ -107,9 +107,8 @@ const StatCard = ({
           </div>
           {change && (
             <div
-              className={`text-xs flex items-center gap-1 mt-1 ${
-                change > 0 ? "text-green-600" : "text-red-600"
-              }`}
+              className={`text-xs flex items-center gap-1 mt-1 ${change > 0 ? "text-green-600" : "text-red-600"
+                }`}
             >
               <TrendingUp className="h-3 w-3" />
               {change > 0 ? "+" : ""}
@@ -501,11 +500,96 @@ export default function AnalyticsDashboard() {
           <TabsList className="bg-white p-1 rounded-lg shadow-sm">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="lines">Assembly Lines</TabsTrigger>
-            <TabsTrigger value="packets">Packet Types</TabsTrigger>
             <TabsTrigger value="trays">Tray Analysis</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Packet Type Distribution
+                </CardTitle>
+                <CardDescription>
+                  Count of different packet types processed today
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="animate-pulse h-96 bg-gray-200 rounded"></div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart
+                      data={packetTypesData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <XAxis
+                        dataKey="type"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12, fill: "#64748b" }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={100}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12, fill: "#64748b" }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "white",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                        }}
+                      />
+                      <Bar
+                        dataKey="count"
+                        radius={[4, 4, 0, 0]}
+                        fill="#3b82f6"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </CardContent>
+            </Card>
+
+                        {/* Packet Types Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {isLoading
+                ? Array.from({ length: 3 }, (_, i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardContent className="p-4">
+                      <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </CardContent>
+                  </Card>
+                ))
+                : packetTypesData.map((packet, index) => (
+                  <Card
+                    key={index}
+                    className="hover:shadow-md transition-shadow duration-200"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-sm">{packet.type}</p>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {packet.count.toLocaleString()}
+                          </p>
+                        </div>
+                        <div
+                          className="w-4 h-4 rounded-full"
+                          style={{ backgroundColor: packet.color }}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
+            
             {/* Overall Production Line Chart */}
             <Card className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
@@ -644,94 +728,6 @@ export default function AnalyticsDashboard() {
                   isLoading={isLoading}
                 />
               ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="packets" className="space-y-6">
-            <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  Packet Type Distribution
-                </CardTitle>
-                <CardDescription>
-                  Count of different packet types processed today
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {isLoading ? (
-                  <div className="animate-pulse h-96 bg-gray-200 rounded"></div>
-                ) : (
-                  <ResponsiveContainer width="100%" height={400}>
-                    <BarChart
-                      data={packetTypesData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis
-                        dataKey="type"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fontSize: 12, fill: "#64748b" }}
-                        angle={-45}
-                        textAnchor="end"
-                        height={100}
-                      />
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fontSize: 12, fill: "#64748b" }}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "white",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "8px",
-                          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        }}
-                      />
-                      <Bar
-                        dataKey="count"
-                        radius={[4, 4, 0, 0]}
-                        fill="#3b82f6"
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Packet Types Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {isLoading
-                ? Array.from({ length: 3 }, (_, i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardContent className="p-4">
-                        <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </CardContent>
-                    </Card>
-                  ))
-                : packetTypesData.map((packet, index) => (
-                    <Card
-                      key={index}
-                      className="hover:shadow-md transition-shadow duration-200"
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-sm">{packet.type}</p>
-                            <p className="text-2xl font-bold text-gray-900">
-                              {packet.count.toLocaleString()}
-                            </p>
-                          </div>
-                          <div
-                            className="w-4 h-4 rounded-full"
-                            style={{ backgroundColor: packet.color }}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
             </div>
           </TabsContent>
 
