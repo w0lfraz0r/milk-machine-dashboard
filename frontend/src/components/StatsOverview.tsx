@@ -19,7 +19,7 @@ const StatsOverview = () => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
             <div className="grid grid-cols-2 divide-x">
-                <div className="px-8 py-6">
+                <div className="px-8 py-2">
                     <p className="text-sm font-medium text-gray-500">Total Packets</p>
                     <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 80 }}>
                         <FlipNumbers
@@ -33,7 +33,7 @@ const StatsOverview = () => {
                         />
                     </div>
                 </div>
-                <div className="px-8 py-6">
+                <div className="px-8 py-2">
                     <p className="text-sm font-medium text-gray-500">Total Trays</p>
                     <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 80 }}>
                         <FlipNumbers
