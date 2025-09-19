@@ -9,30 +9,22 @@ const router = Router();
 // Get optical counts for today
 router.get("/optical-counts", async (req: Request, res: Response) => {
   try {
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-
     const opticalData = await db
       .select({
-        name: tabOpticalCount.name,
-        creation: tabOpticalCount.creation,
-        assemblyLine: tabOpticalCount.assemblyLine,
-        machineId: tabOpticalCount.machineId,
-        fromTime: tabOpticalCount.fromTime,
-        toTime: tabOpticalCount.toTime,
-        countedPackets: tabOpticalCount.countedPackets,
+        name: tabTrays.name,
+        creation: sql`DATE_FORMAT(${tabTrays.creation}, '%Y-%m-%d %H:%i:%s')`,
+        conveyorBeltNumber: tabTrays.conveyorBeltNumber,
+        timeOfDetection: sql`DATE_FORMAT(${tabTrays.timeOfDetection}, '%Y-%m-%d %H:%i:%s')`,
+        identifiedPacketCount: tabTrays.identifiedPacketCount,
       })
-      .from(tabOpticalCount)
-      .where(sql`${tabOpticalCount.creation} >= ${startOfDay.toISOString()}`)
-      .orderBy(desc(tabOpticalCount.fromTime));
+      .from(tabTrays)
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`)
+      .orderBy(desc(tabTrays.timeOfDetection));
 
     res.json(opticalData);
   } catch (error) {
     console.error("Error fetching optical counts:", error);
-    res.status(500).json({
-      error: "Failed to fetch optical counts",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    res.status(500).json({ error: "Failed to fetch optical counts" });
   }
 });
 
@@ -44,25 +36,22 @@ router.get("/optical-counts/hourly", async (req: Request, res: Response) => {
 
     const hourlyData = await db
       .select({
-        hour: sql<string>`to_char(${tabOpticalCount.fromTime}, 'HH24:00')`,
+        hour: sql<string>`DATE_FORMAT(${tabOpticalCount.fromTime}, '%H:00')`,
         assemblyLine: tabOpticalCount.assemblyLine,
         totalPackets: sql<number>`SUM(${tabOpticalCount.countedPackets})`,
       })
       .from(tabOpticalCount)
       .where(sql`${tabOpticalCount.creation} >= ${startOfDay.toISOString()}`)
       .groupBy(
-        sql`to_char(${tabOpticalCount.fromTime}, 'HH24:00')`,
+        sql`DATE_FORMAT(${tabOpticalCount.fromTime}, '%H:00')`,
         tabOpticalCount.assemblyLine
       )
-      .orderBy(sql`to_char(${tabOpticalCount.fromTime}, 'HH24:00')`);
+      .orderBy(sql`DATE_FORMAT(${tabOpticalCount.fromTime}, '%H:00')`);
 
     res.json(hourlyData);
   } catch (error) {
-    console.error("Error fetching hourly optical counts:", error);
-    res.status(500).json({
-      error: "Failed to fetch hourly optical counts",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    console.error("Error fetching hourly data:", error);
+    res.status(500).json({ error: "Failed to fetch hourly data" });
   }
 });
 
@@ -72,14 +61,16 @@ router.get("/trays", async (req: Request, res: Response) => {
     const trayData = await db
       .select({
         name: tabTrays.name,
-        creation: tabTrays.creation,
-        convery_id: tabTrays.converyId,
-        trayid: tabTrays.trayid,
-        packetsnumber: tabTrays.packetsnumber,
-        packettype: tabTrays.packettype,
+        creation: sql`DATE_FORMAT(${tabTrays.creation}, '%Y-%m-%d %H:%i:%s')`,
+        conveyorBeltNumber: tabTrays.conveyorBeltNumber,
+        trayId: tabTrays.trayId,
+        identifiedPacketCount: tabTrays.identifiedPacketCount,
+        identifiedColor: tabTrays.identifiedColor,
+        type: tabTrays.type,
+        timeOfDetection: sql`DATE_FORMAT(${tabTrays.timeOfDetection}, '%Y-%m-%d %H:%i:%s')`,
       })
       .from(tabTrays)
-      .where(sql`DATE(${tabTrays.creation}) = CURRENT_DATE`)
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`)
       .orderBy(desc(tabTrays.creation))
       .limit(1000);
 
@@ -98,22 +89,19 @@ router.get("/packet-types/summary", async (req: Request, res: Response) => {
   try {
     const packetTypeSummary = await db
       .select({
-        packettype: tabTrays.packettype,
-        total_packets: sql<number>`SUM(${tabTrays.packetsnumber})`,
+        type: tabTrays.type,
+        total_packets: sql<number>`SUM(${tabTrays.identifiedPacketCount})`,
         tray_count: sql<number>`COUNT(*)`,
       })
       .from(tabTrays)
       .where(sql`DATE(${tabTrays.creation}) = CURRENT_DATE`)
-      .groupBy(tabTrays.packettype)
-      .orderBy(sql`SUM(${tabTrays.packetsnumber}) DESC`);
+      .groupBy(tabTrays.type)
+      .orderBy(sql`SUM(${tabTrays.identifiedPacketCount}) DESC`);
 
     res.json(packetTypeSummary);
   } catch (error) {
     console.error("Error fetching packet type summary:", error);
-    res.status(500).json({
-      error: "Failed to fetch packet type summary",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    res.status(500).json({ error: "Failed to fetch packet type summary" });
   }
 });
 
@@ -122,59 +110,57 @@ router.get("/trays/hourly", async (req: Request, res: Response) => {
   try {
     const hourlyTrays = await db
       .select({
-        hour: sql<string>`to_char(${tabTrays.creation}, 'HH24:00')`,
+        hour: sql<string>`DATE_FORMAT(${tabTrays.timeOfDetection}, '%H:00')`,
         tray_count: sql<number>`COUNT(*)`,
-        total_packets: sql<number>`SUM(${tabTrays.packetsnumber})`,
+        total_packets: sql<number>`SUM(${tabTrays.identifiedPacketCount})`,
       })
       .from(tabTrays)
-      .where(sql`DATE(${tabTrays.creation}) = CURRENT_DATE`)
-      .groupBy(sql`to_char(${tabTrays.creation}, 'HH24:00')`)
-      .orderBy(sql`to_char(${tabTrays.creation}, 'HH24:00')`);
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`)
+      .groupBy(sql`DATE_FORMAT(${tabTrays.timeOfDetection}, '%H:00')`)
+      .orderBy(sql`DATE_FORMAT(${tabTrays.timeOfDetection}, '%H:00')`);
 
     res.json(hourlyTrays);
   } catch (error) {
     console.error("Error fetching hourly tray counts:", error);
-    res.status(500).json({
-      error: "Failed to fetch hourly tray counts",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    res.status(500).json({ error: "Failed to fetch hourly tray counts" });
   }
 });
 
 // Get dashboard statistics
 router.get("/stats", async (req: Request, res: Response) => {
   try {
-    // Get total packets today
     const [totalPacketsResult] = await db
       .select({
-        total: sql<number>`COALESCE(SUM(${tabOpticalCount.countedPackets}), 0)`,
+        total: sql<number>`COALESCE(SUM(${tabTrays.identifiedPacketCount}), 0)`,
       })
-      .from(tabOpticalCount)
-      .where(sql`DATE(${tabOpticalCount.creation}) = CURRENT_DATE`);
+      .from(tabTrays)
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`);
 
-    // Get active assembly lines
     const [activeLinesResult] = await db
       .select({
-        count: sql<number>`COUNT(DISTINCT ${tabOpticalCount.assemblyLine})`,
+        count: sql<number>`COUNT(DISTINCT ${tabTrays.conveyorBeltNumber})`,
       })
-      .from(tabOpticalCount)
-      .where(sql`DATE(${tabOpticalCount.creation}) = CURRENT_DATE`);
+      .from(tabTrays)
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`);
 
-    // Get total trays today
     const [totalTraysResult] = await db
       .select({
         total: sql<number>`COUNT(*)`,
       })
       .from(tabTrays)
-      .where(sql`DATE(${tabTrays.creation}) = CURRENT_DATE`);
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`);
 
-    // Calculate capacity utilization (assuming 150 trays/hour max capacity)
     const [avgTraysResult] = await db
       .select({
-        avg_per_hour: sql<number>`COUNT(*) / GREATEST(EXTRACT(EPOCH FROM (MAX(${tabTrays.creation}) - MIN(${tabTrays.creation}))) / 3600, 1)`,
+        avg_per_hour: sql<number>`
+          COUNT(*) / GREATEST(
+            TIMESTAMPDIFF(HOUR, MIN(${tabTrays.creation}), MAX(${tabTrays.creation})) + 1,
+            1
+          )
+        `,
       })
       .from(tabTrays)
-      .where(sql`DATE(${tabTrays.creation}) = CURRENT_DATE`);
+      .where(sql`DATE(${tabTrays.creation}) = CURDATE()`);
 
     const capacityUtilization = Math.round(
       (avgTraysResult.avg_per_hour / 150) * 100
@@ -188,10 +174,7 @@ router.get("/stats", async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error fetching statistics:", error);
-    res.status(500).json({
-      error: "Failed to fetch statistics",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    res.status(500).json({ error: "Failed to fetch statistics" });
   }
 });
 

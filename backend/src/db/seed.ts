@@ -7,12 +7,14 @@ async function seed() {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
-    // Generate data for different hours of the day
     const generateTimestamp = (hour: number) => {
       const date = new Date(startOfDay);
       date.setHours(hour);
       return date;
     };
+
+    const colors = ["red", "blue", "green", "yellow"];
+    const types = ["half", "one", "six"];
 
     // Sample tray data across different hours
     const trays = Array.from({ length: 20 }).map((_, index) => ({
@@ -23,16 +25,17 @@ async function seed() {
       owner: "system",
       docstatus: 0,
       idx: index + 1,
-      amendedFrom: null,
       userTags: null,
       comments: null,
       assign: null,
       likedBy: null,
-      converyId: `C${(index + 1).toString().padStart(3, "0")}`,
-      trayid: `T${(index + 1).toString().padStart(3, "0")}`,
-      trayimage: null,
-      packetsnumber: Math.floor(Math.random() * 50) + 100,
-      packettype: ["half", "one", "six"][Math.floor(Math.random() * 3)],
+      conveyorBeltNumber: Math.floor(Math.random() * 2) + 1,
+      trayId: index + 1,
+      identifiedPacketCount: Math.floor(Math.random() * 50) + 100,
+      identifiedColor: colors[Math.floor(Math.random() * colors.length)],
+      type: types[Math.floor(Math.random() * types.length)],
+      frameImage: null,
+      timeOfDetection: generateTimestamp(Math.floor(index / 2)),
     }));
 
     // Sample optical count data across different hours
@@ -45,6 +48,10 @@ async function seed() {
         owner: "system",
         docstatus: 0,
         idx: hour * 4 + line + 1,
+        userTags: null,
+        comments: null,
+        assign: null,
+        likedBy: null,
         assemblyLine: line + 1,
         machineId: 100 + line + 1,
         fromTime: generateTimestamp(hour),
@@ -55,7 +62,7 @@ async function seed() {
 
     console.log("🌱 Starting seed...");
 
-    // Clear existing data using MySQL syntax
+    // Clear existing data
     await db.delete(tabTrays);
     await db.delete(tabOpticalCount);
 

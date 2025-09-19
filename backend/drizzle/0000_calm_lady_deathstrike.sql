@@ -1,0 +1,41 @@
+CREATE TABLE `tabOpticalCount` (
+	`name` varchar(140) NOT NULL,
+	`creation` timestamp(6),
+	`modified` timestamp(6),
+	`modified_by` varchar(140),
+	`owner` varchar(140),
+	`docstatus` tinyint NOT NULL DEFAULT 0,
+	`idx` int NOT NULL DEFAULT 0,
+	`_user_tags` text,
+	`_comments` text,
+	`_assign` text,
+	`_liked_by` text,
+	`assembly_line` int NOT NULL DEFAULT 0,
+	`machine_id` int NOT NULL DEFAULT 0,
+	`from_time` timestamp(6),
+	`to_time` timestamp(6),
+	`counted_packets` int NOT NULL DEFAULT 0,
+	CONSTRAINT `tabOpticalCount_name` PRIMARY KEY(`name`)
+);
+--> statement-breakpoint
+CREATE TABLE `tabTrays` (
+	`name` varchar(140) NOT NULL,
+	`creation` timestamp(6),
+	`modified` timestamp(6),
+	`modified_by` varchar(140),
+	`owner` varchar(140),
+	`docstatus` tinyint NOT NULL DEFAULT 0,
+	`idx` int NOT NULL DEFAULT 0,
+	`_user_tags` text,
+	`_comments` text,
+	`_assign` text,
+	`_liked_by` text,
+	`conveyor_belt_number` int NOT NULL DEFAULT 0,
+	`tray_id` int NOT NULL DEFAULT 0,
+	`identified_packet_count` int NOT NULL DEFAULT 0,
+	`identified_color` varchar(140),
+	`type` varchar(140),
+	`frame_image` text,
+	`time_of_detection` timestamp(6),
+	CONSTRAINT `tabTrays_name` PRIMARY KEY(`name`)
+);

@@ -24,7 +24,6 @@ import {
 } from "recharts";
 import {
   Activity,
-  Package,
   Layers,
   TrendingUp,
   Clock,
@@ -48,19 +47,18 @@ interface OpticalCountData {
 interface TrayData {
   name: string;
   creation: string;
-  convery_id: string;
-  trayid: string;
-  packetsnumber: number;
-  packettype: string; // 'half', 'one', 'six'
+  conveyorBeltNumber: number;
+  trayId: number;
+  identifiedPacketCount: number;
+  identifiedColor: string | null;
+  type: string | null;
+  timeOfDetection: string;
 }
 
 interface TimeSeriesPoint {
   time: string;
-  timestamp: string;
   line1: number;
   line2: number;
-  line3: number;
-  line4: number;
   total: number;
 }
 
@@ -69,6 +67,17 @@ interface PacketTypeCount {
   count: number;
   color: string;
 }
+
+// Color mapping function for packet types
+const getColorForType = (type: string): string => {
+  const colorMap: { [key: string]: string } = {
+    half: "#3b82f6", // blue
+    one: "#10b981", // green
+    six: "#f59e0b", // amber
+    unknown: "#94a3b8", // gray
+  };
+  return colorMap[type.toLowerCase()] || colorMap.unknown;
+};
 
 const StatCard = ({
   title,
@@ -116,21 +125,26 @@ const StatCard = ({
   </Card>
 );
 
-const AssemblyLineChart = ({ lineNumber, data, isLoading }) => (
-  <Card className="hover:shadow-lg transition-shadow duration-300">
-    <CardHeader>
-      <div className="flex items-center justify-between">
-        <div>
-          <CardTitle className="text-lg">Assembly Line {lineNumber}</CardTitle>
-          <CardDescription>Packet count over time</CardDescription>
+const AssemblyLineChart = ({ lineNumber, data, isLoading }) => {
+  // Only render if it's line 1 or 2
+  if (lineNumber > 2) return null;
+
+  return (
+    <Card className="hover:shadow-lg transition-shadow duration-300">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-lg">
+              Conveyor Belt {lineNumber}
+            </CardTitle>
+            <CardDescription>Packet count over time</CardDescription>
+          </div>
+          <Badge variant="outline" className="bg-blue-50">
+            <Activity className="h-3 w-3 mr-1" />
+            Active
+          </Badge>
         </div>
-        <Badge variant="outline" className="bg-blue-50">
-          <Activity className="h-3 w-3 mr-1" />
-          Active
-        </Badge>
-      </div>
-    </CardHeader>
-    <CardContent>
+      </CardHeader>
       {isLoading ? (
         <div className="animate-pulse">
           <div className="h-48 bg-gray-200 rounded"></div>
@@ -181,9 +195,9 @@ const AssemblyLineChart = ({ lineNumber, data, isLoading }) => (
           </AreaChart>
         </ResponsiveContainer>
       )}
-    </CardContent>
-  </Card>
-);
+    </Card>
+  );
+};
 
 const StatsOverview = ({ stats, isLoading }) => (
   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
@@ -268,62 +282,43 @@ export default function AnalyticsDashboard() {
   };
 
   // Process optical data into time series for charts
-  const processTimeSeriesData = (
-    opticalData: OpticalCountData[]
-  ): TimeSeriesPoint[] => {
-    const timeMap = new Map<string, { [key: string]: number }>();
+  const processTimeSeriesData = (data: TrayData[]): TimeSeriesPoint[] => {
+    const timeMap = new Map<string, { line1: number; line2: number }>();
 
-    opticalData.forEach((record) => {
-      if (!record.fromTime) return;
+    // Initialize all hours
+    for (let hour = 0; hour < 24; hour++) {
+      const formattedHour = hour.toString().padStart(2, "0") + ":00";
+      timeMap.set(formattedHour, { line1: 0, line2: 0 });
+    }
 
-      const date = new Date(record.fromTime);
+    // Process data
+    data.forEach((record) => {
+      if (!record.timeOfDetection) return;
+
+      // Parse MySQL datetime string
+      const date = new Date(record.timeOfDetection.replace(" ", "T") + "Z");
       if (isNaN(date.getTime())) return;
 
       const hour = date.getHours().toString().padStart(2, "0");
-      const formattedHour = `${hour}:00`;
+      const timeKey = `${hour}:00`;
 
-      if (!timeMap.has(formattedHour)) {
-        timeMap.set(formattedHour, {
-          line1: 0,
-          line2: 0,
-          line3: 0,
-          line4: 0,
-        });
+      const current = timeMap.get(timeKey) || { line1: 0, line2: 0 };
+      if (record.conveyorBeltNumber === 1) {
+        current.line1 += record.identifiedPacketCount;
+      } else if (record.conveyorBeltNumber === 2) {
+        current.line2 += record.identifiedPacketCount;
       }
-
-      const lineKey = `line${record.assemblyLine}`;
-      const current = timeMap.get(formattedHour)!;
-      current[lineKey] = (current[lineKey] || 0) + record.countedPackets;
+      timeMap.set(timeKey, current);
     });
 
-    const sortedData = Array.from(timeMap.entries())
+    return Array.from(timeMap.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([time, values]) => ({
         time,
-        line1: values.line1 || 0,
-        line2: values.line2 || 0,
-        line3: values.line3 || 0,
-        line4: values.line4 || 0,
-        total: Object.values(values).reduce((sum, val) => sum + (val || 0), 0),
+        line1: values.line1,
+        line2: values.line2,
+        total: values.line1 + values.line2,
       }));
-
-    if (sortedData.length === 0) {
-      // Add placeholder data if no data exists
-      const hours = Array.from(
-        { length: 24 },
-        (_, i) => `${i.toString().padStart(2, "0")}:00`
-      );
-      return hours.map((hour) => ({
-        time: hour,
-        line1: 0,
-        line2: 0,
-        line3: 0,
-        line4: 0,
-        total: 0,
-      }));
-    }
-
-    return sortedData;
   };
 
   // Process packet types from tray data
@@ -331,51 +326,53 @@ export default function AnalyticsDashboard() {
     const typeMap = new Map<string, number>();
 
     trayData.forEach((tray) => {
-      const type = tray.packettype || "unknown";
-      typeMap.set(type, (typeMap.get(type) || 0) + tray.packetsnumber);
+      const type = tray.type || "unknown";
+      typeMap.set(type, (typeMap.get(type) || 0) + tray.identifiedPacketCount);
     });
 
-    const colors = {
-      half: "#3b82f6", // 0.5L - Blue
-      one: "#10b981", // 1L - Green
-      six: "#f59e0b", // 6L - Orange
-      unknown: "#6b7280", // Unknown - Gray
-    };
-
-    const typeNames = {
-      half: "0.5L Packets",
-      one: "1L Packets",
-      six: "6L Packets",
-      unknown: "Unknown Type",
-    };
-
-    return Array.from(typeMap.entries()).map(([type, count]) => ({
-      type: typeNames[type] || type,
-      count,
-      color: colors[type] || colors.unknown,
-    }));
+    return Array.from(typeMap.entries())
+      .map(([type, count]) => ({
+        type: type,
+        count,
+        color: getColorForType(type),
+      }))
+      .sort((a, b) => b.count - a.count);
   };
 
   // Process tray data for hourly analysis
   const processTrayAnalysis = (data: TrayData[]) => {
-    const hourlyTrayData: { [key: string]: number } = {};
+    const hourlyTrayData = new Map<
+      string,
+      { trays: number; capacity: number }
+    >();
+
+    // Initialize all hours
+    for (let i = 0; i < 24; i++) {
+      const hour = i.toString().padStart(2, "0");
+      hourlyTrayData.set(`${hour}:00`, { trays: 0, capacity: 150 });
+    }
 
     data.forEach((tray) => {
-      const date = new Date(tray.creation);
-      if (isNaN(date.getTime())) return; // Skip invalid dates
+      if (!tray.timeOfDetection) return;
+
+      // Parse MySQL datetime string
+      const date = new Date(tray.timeOfDetection.replace(" ", "T") + "Z");
+      if (isNaN(date.getTime())) return;
 
       const hour = date.getHours().toString().padStart(2, "0");
-      const formattedTime = `${hour}:00`;
+      const timeKey = `${hour}:00`;
 
-      hourlyTrayData[formattedTime] = (hourlyTrayData[formattedTime] || 0) + 1;
+      const current = hourlyTrayData.get(timeKey)!;
+      current.trays += 1;
+      hourlyTrayData.set(timeKey, current);
     });
 
-    return Object.entries(hourlyTrayData)
+    return Array.from(hourlyTrayData.entries())
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([hour, trays]) => ({
+      .map(([hour, data]) => ({
         hour,
-        trays,
-        capacity: 150, // Maximum capacity per hour
+        trays: data.trays,
+        capacity: data.capacity,
       }));
   };
 
@@ -414,12 +411,13 @@ export default function AnalyticsDashboard() {
   }, [opticalData, trayData]);
 
   // Calculate statistics
-  const totalPacketsToday = opticalData.reduce(
-    (sum, record) => sum + record.countedPackets,
+  const totalPacketsToday = trayData.reduce(
+    (sum, record) => sum + record.identifiedPacketCount,
     0
   );
-  const activeLines = new Set(opticalData.map((record) => record.assemblyLine))
-    .size;
+  const activeLines = new Set(
+    trayData.map((record) => record.conveyorBeltNumber)
+  ).size;
   const totalTrays = trayData.length;
   const hourlyTrayData = processTrayAnalysis(trayData);
   const avgTraysPerHour =
@@ -619,28 +617,14 @@ export default function AnalyticsDashboard() {
                         type="monotone"
                         dataKey="line1"
                         stroke="#3b82f6"
-                        name="Line 1"
+                        name="Conveyor Belt 1"
                         strokeWidth={2}
                       />
                       <Line
                         type="monotone"
                         dataKey="line2"
                         stroke="#10b981"
-                        name="Line 2"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="line3"
-                        stroke="#f59e0b"
-                        name="Line 3"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="line4"
-                        stroke="#ef4444"
-                        name="Line 4"
+                        name="Conveyor Belt 2"
                         strokeWidth={2}
                       />
                     </LineChart>
