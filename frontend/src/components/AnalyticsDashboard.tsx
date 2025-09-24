@@ -29,9 +29,11 @@ import {
   TrendingUp,
   Clock,
   Zap,
+  Car,
 } from "lucide-react";
 import StatsOverview from "./StatsOverview";
 import StatsOverviewHome from "./StatsOverviewHome";
+import AssemblyLinePacketsBarChart from "./AssemblyLinePacketsBarChart";
 
 // API base URL - adjust according to your backend setup
 const API_BASE_URL = "http://localhost:3001/api";
@@ -209,6 +211,7 @@ export default function AnalyticsDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeTab, setActiveTab] = useState("home");
 
   // Fetch optical count data
   const fetchOpticalData = async () => {
@@ -448,18 +451,86 @@ export default function AnalyticsDashboard() {
         <div className="absolute left-0 right-0 -bottom-12">
           <div className="max-w-[1440px] mx-auto px-8">
             <StatsOverviewHome />
+            {/* use hoc and activeTab to display appropraite stat card */}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="max-w-[1440px] mx-auto px-8 pt-28 pb-8">
-        <Tabs defaultValue="overview" className="space-y-8">
+        <Tabs className="space-y-8" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-white p-1 rounded-lg shadow-sm">
+            <TabsTrigger value="home">Home</TabsTrigger>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="lines">Assembly Lines</TabsTrigger>
             <TabsTrigger value="trays">Tray Analysis</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="home" className="space-y-6">
+            {/* 6 brand cards */}
+            {/* assemly line thing */}
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Assembly line wise production - Today
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="justify-center items-center">
+                <AssemblyLinePacketsBarChart />
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Packet Type Distribution
+                </CardTitle>
+                <CardDescription>
+                  Count of different packet types processed today
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="animate-pulse h-96 bg-gray-200 rounded"></div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart
+                      data={packetTypesData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <XAxis
+                        dataKey="type"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12, fill: "#64748b" }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={100}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 12, fill: "#64748b" }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "white",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                        }}
+                      />
+                      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                        {packetTypesData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="hover:shadow-lg transition-shadow duration-300">
