@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LabelList } from 'recharts';
 
 const data = [
     {
@@ -38,6 +38,7 @@ const AssemblyLinePacketsBarChart = () => {
                     {data.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
+                    <LabelList dataKey="packets" position="center" style={{ fill: 'black', fontWeight: 'bold' }} />
                 </Bar>
             </BarChart>
         </ResponsiveContainer>
