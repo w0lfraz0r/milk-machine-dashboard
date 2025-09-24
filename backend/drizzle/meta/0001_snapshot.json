@@ -1,0 +1,310 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "bcb84973-6a26-4f2c-9a82-77648cbbdff4",
+  "prevId": "6910f35c-45f1-4a19-8cb9-7dbd29ea3a12",
+  "tables": {
+    "tabOpticalCount": {
+      "name": "tabOpticalCount",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "creation": {
+          "name": "creation",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "modified": {
+          "name": "modified",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "docstatus": {
+          "name": "docstatus",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "idx": {
+          "name": "idx",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "_user_tags": {
+          "name": "_user_tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_comments": {
+          "name": "_comments",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_assign": {
+          "name": "_assign",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_liked_by": {
+          "name": "_liked_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "assembly_line": {
+          "name": "assembly_line",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "machine_id": {
+          "name": "machine_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "from_time": {
+          "name": "from_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "to_time": {
+          "name": "to_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "counted_packets": {
+          "name": "counted_packets",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "incremental_counts": {
+          "name": "incremental_counts",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "derived_count": {
+          "name": "derived_count",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "tabOpticalCount_name": {
+          "name": "tabOpticalCount_name",
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "tabTrays": {
+      "name": "tabTrays",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "creation": {
+          "name": "creation",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "modified": {
+          "name": "modified",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "docstatus": {
+          "name": "docstatus",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "idx": {
+          "name": "idx",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "_user_tags": {
+          "name": "_user_tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_comments": {
+          "name": "_comments",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_assign": {
+          "name": "_assign",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_liked_by": {
+          "name": "_liked_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "conveyor_belt_number": {
+          "name": "conveyor_belt_number",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "tray_id": {
+          "name": "tray_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "identified_packet_count": {
+          "name": "identified_packet_count",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "identified_color": {
+          "name": "identified_color",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(140)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "frame_image": {
+          "name": "frame_image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "time_of_detection": {
+          "name": "time_of_detection",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "tabTrays_name": {
+          "name": "tabTrays_name",
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

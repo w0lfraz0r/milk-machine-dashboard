@@ -56,6 +56,8 @@ export const tabOpticalCount = mysqlTable(
     fromTime: timestamp("from_time", { mode: "date", fsp: 6 }),
     toTime: timestamp("to_time", { mode: "date", fsp: 6 }),
     countedPackets: int("counted_packets").notNull().default(0),
+    incrementalCounts: int("incremental_counts").notNull().default(0),
+    derivedCount: int("derived_count").notNull().default(0),
   },
   (table) => ({
     creationIdx: sql`INDEX \`creation\` (\`creation\`)`,

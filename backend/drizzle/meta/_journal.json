@@ -8,6 +8,13 @@
       "when": 1758210711987,
       "tag": "0000_calm_lady_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1758703410712,
+      "tag": "0001_magical_hulk",
+      "breakpoints": true
     }
   ]
 }
