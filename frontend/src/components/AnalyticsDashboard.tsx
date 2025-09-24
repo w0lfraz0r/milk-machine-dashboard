@@ -419,31 +419,32 @@ export default function AnalyticsDashboard() {
           <div className="px-8 pt-8 pb-28">
             <div className="flex items-center justify-between mb-12">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-red-500 flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">A</span>
+                <div className="h-10 px-2 py-2 rounded-lg flex items-center justify-center">
+                  <p className="text-black text-xl font-bold">Dashboard</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
                 <Clock className="h-4 w-4 text-gray-600" />
                 <span className="text-gray-600">
-                  Last updated: {currentTime.toLocaleTimeString()}
+                  {currentTime.toLocaleTimeString()}
                 </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-10 px-2 py-2 rounded-lg bg-red-500 flex items-center justify-center">
+                  <p className="text-black text-xl font-bold">Alerts</p>
+                </div>
               </div>
             </div>
             <div className="text-center max-w-2xl mx-auto">
               <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-                Good morning, Team!
+                Welcome to BAMUL Dashboard
               </h1>
-              <p className="text-gray-600">
-                Explore your team's latest production metrics to see how you're
-                driving results.
-              </p>
             </div>
           </div>
         </div>
 
         {/* Overlapping Stats Card */}
-        <div className="absolute left-0 right-0 -bottom-16">
+        <div className="absolute left-0 right-0 -bottom-12">
           <div className="max-w-[1440px] mx-auto px-8">
             <StatsOverview />
           </div>
