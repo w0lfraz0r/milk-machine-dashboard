@@ -31,7 +31,7 @@ import {
   Zap,
 } from "lucide-react";
 import StatsOverview from "./StatsOverview";
-import StatsOverviewv2 from "./StatsOverviewv2";
+import StatsOverviewHome from "./StatsOverviewHome";
 
 // API base URL - adjust according to your backend setup
 const API_BASE_URL = "http://localhost:3001/api";
@@ -447,7 +447,7 @@ export default function AnalyticsDashboard() {
         {/* Overlapping Stats Card */}
         <div className="absolute left-0 right-0 -bottom-12">
           <div className="max-w-[1440px] mx-auto px-8">
-            <StatsOverviewv2 />
+            <StatsOverviewHome />
           </div>
         </div>
       </div>

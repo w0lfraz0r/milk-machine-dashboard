@@ -5,7 +5,7 @@ const START_PACKETS = 356;
 const START_TRAYS = 31;
 const START_MILK_LITERS = 1200;
 
-const StatsOverview = () => {
+const StatsOverviewHome = () => {
     const [animatedPackets, setAnimatedPackets] = useState(START_PACKETS);
     const [animatedTrays, setAnimatedTrays] = useState(START_TRAYS);
     const [animatedMilkLiters, setAnimatedMilkLiters] = useState(START_MILK_LITERS);
@@ -69,4 +69,4 @@ const StatsOverview = () => {
     );
 };
 
-export default StatsOverview;
+export default StatsOverviewHome;
