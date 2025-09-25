@@ -458,8 +458,8 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-[1440px] mx-auto px-8 pt-28 pb-8">
-        <Tabs className="space-y-8" value={activeTab} onValueChange={setActiveTab}>
+      <div className="max-w-[1440px] mx-auto px-8 pt-15 pb-8">
+        <Tabs className="space-y-1" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-white p-1 rounded-lg shadow-sm">
             <TabsTrigger value="home">Home</TabsTrigger>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -467,10 +467,10 @@ export default function AnalyticsDashboard() {
             <TabsTrigger value="trays">Tray Analysis</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="home" className="space-y-6">
+          <TabsContent value="home" className="space-y-1">
             {/* 6 brand cards */}
-            <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
+            <Card className="hover:shadow-lg transition-shadow duration-300 pt-1">
+              <CardHeader className="py-0">
                 <CardTitle className="text-xl">
                   Packet Wise Distribution
                 </CardTitle>

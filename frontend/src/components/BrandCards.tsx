@@ -44,7 +44,7 @@ const brandCardPropsList = [
 
 function BrandCards() {
   return (
-    <div className="grid grid-cols-3 gap-6 w-full max-w-5xl mx-auto mt-0">
+    <div className="grid grid-cols-3 gap-6 w-full max-w-8xl mx-auto mt-0">
       {brandCardPropsList.map((props) => (
         <BrandCard key={props.title} {...props} />
       ))}
