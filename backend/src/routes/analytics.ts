@@ -178,6 +178,28 @@ router.get("/stats", async (req: Request, res: Response) => {
   }
 });
 
+// Get today toal packets from opticalcounter
+router.get("/stats/total-packets", async (req: Request, res: Response) => {
+  try {
+    const [latestResult] = await db
+      .select({
+        derivedCount: tabOpticalCount.derivedCount,
+      })
+      .from(tabOpticalCount)
+      .where(sql`DATE(${tabOpticalCount.creation}) = CURDATE()`)
+      .orderBy(sql`${tabOpticalCount.creation} DESC`)
+      .limit(1);
+
+    res.json({
+      totalPackets: latestResult?.derivedCount || 0,
+    });
+  } catch (error) {
+    console.error("Error fetching today total packets from opticalcounter:", error);
+    res.status(500).json({ error: "Failed to fetch today total packets from opticalcounter" });
+  }
+});
+
+
 // Health check endpoint
 router.get("/health", async (req: Request, res: Response) => {
   try {
