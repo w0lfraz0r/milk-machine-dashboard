@@ -25,6 +25,15 @@ export const BRAND_COLORS = {
     desiCow: '#8e24aa', // purple
 }
 
+export const BRAND_COLOR_TO_NAME = {
+    green: 'nandiniSpecial',
+    orange: 'shubham',
+    darkGreen: 'homogenisedCow',
+    purple: 'desiCow',
+    pink: 'smrudhi',
+    blue: 'tonedMilk',
+};// actual color values are green, yellow, red, blue
+
 export const BRAND_PACKET_SIZES = {
     tonedMilk: ['one', 'half', 'six', 'small'] as (keyof typeof PACKET_SIZE_LABELS)[],
     shubham: ['one', 'half'] as (keyof typeof PACKET_SIZE_LABELS)[],
