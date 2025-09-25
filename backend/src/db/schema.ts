@@ -64,7 +64,80 @@ export const tabOpticalCount = mysqlTable(
   })
 );
 
+
+export const tabOpticalHistoryByMachine = mysqlTable(
+  "tabOpticalHistoryByMachine",
+  {
+    id: int("id").autoincrement().primaryKey().notNull(),
+    machineId: int("machine_id").notNull(),
+    day: timestamp("day", { mode: "date" }).notNull(),
+    totalCount: int("total_count").notNull().default(0),
+    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    calculatedBy: varchar("calculated_by", { length: 140 }),
+  },
+  (table) => ({
+    dayIdx: sql`INDEX \`day_machine_idx\` (\`day\`, \`machine_id\`)`,
+  })
+);
+
+export const tabOpticalHistoryByAssembly = mysqlTable(
+  "tabOpticalHistoryByAssembly",
+  {
+    id: int("id").autoincrement().primaryKey().notNull(),
+    assemblyLine: int("assembly_line").notNull(),
+    day: timestamp("day", { mode: "date" }).notNull(),
+    totalCount: int("total_count").notNull().default(0),
+    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    calculatedBy: varchar("calculated_by", { length: 140 }),
+  },
+  (table) => ({
+    dayIdx: sql`INDEX \`day_assembly_idx\` (\`day\`, \`assembly_line\`)`,
+  })
+);
+
+export const tabTrayHistoryByConveyor = mysqlTable(
+  "tabTrayHistoryByConveyor",
+  {
+    id: int("id").autoincrement().primaryKey().notNull(),
+    conveyorBeltNumber: int("conveyor_belt_number").notNull(),
+    day: timestamp("day", { mode: "date" }).notNull(),
+    totalIdentifiedPackets: int("total_identified_packets").notNull().default(0),
+    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    calculatedBy: varchar("calculated_by", { length: 140 }),
+  },
+  (table) => ({
+    dayIdx: sql`INDEX \`day_conveyor_idx\` (\`day\`, \`conveyor_belt_number\`)`,
+  })
+);
+
+export const tabTrayHistoryByColorType = mysqlTable(
+  "tabTrayHistoryByColorType",
+  {
+    id: int("id").autoincrement().primaryKey().notNull(),
+    conveyorBeltNumber: int("conveyor_belt_number").notNull(),
+    identifiedColor: varchar("identified_color", { length: 140 }),
+    type: varchar("type", { length: 140 }),
+    day: timestamp("day", { mode: "date" }).notNull(),
+    count: int("count").notNull().default(0),
+    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    calculatedBy: varchar("calculated_by", { length: 140 }),
+  },
+  (table) => ({
+    dayIdx: sql`INDEX \`day_color_type_idx\` (\`day\`, \`conveyor_belt_number\`, \`identified_color\`, \`type\`)`,
+  })
+);
+
+
+
 export type TraySelect = typeof tabTrays.$inferSelect;
 export type TrayInsert = typeof tabTrays.$inferInsert;
 export type OpticalCountSelect = typeof tabOpticalCount.$inferSelect;
 export type OpticalCountInsert = typeof tabOpticalCount.$inferInsert;
+export type OpticalHistoryByMachineSelect = typeof tabOpticalHistoryByMachine.$inferSelect;
+export type OpticalHistoryByAssemblySelect = typeof tabOpticalHistoryByAssembly.$inferSelect;
+export type TrayHistoryByConveyorSelect = typeof tabTrayHistoryByConveyor.$inferSelect;
+export type TrayHistoryByColorTypeSelect = typeof tabTrayHistoryByColorType.$inferSelect;
