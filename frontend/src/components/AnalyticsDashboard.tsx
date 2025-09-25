@@ -468,25 +468,11 @@ export default function AnalyticsDashboard() {
 
           <TabsContent value="home" className="space-y-6">
             {/* 6 brand cards */}
-            {/* assemly line thing */}
-            <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  Assembly line wise production - Today
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="justify-center items-center">
-                <AssemblyLinePacketsBarChart />
-              </CardContent>
-            </Card>
             <Card className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <CardTitle className="text-xl">
                   Packet Type Distribution
                 </CardTitle>
-                <CardDescription>
-                  Count of different packet types processed today
-                </CardDescription>
               </CardHeader>
               <CardContent>
                 {isLoading ? (
@@ -528,6 +514,17 @@ export default function AnalyticsDashboard() {
                     </BarChart>
                   </ResponsiveContainer>
                 )}
+              </CardContent>
+            </Card>
+            {/* assemly line thing */}
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Assembly line wise production - Today
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="justify-center items-center">
+                <AssemblyLinePacketsBarChart />
               </CardContent>
             </Card>
           </TabsContent>

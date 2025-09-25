@@ -17,7 +17,7 @@ const colors = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
 
 const AssemblyLinePacketsBarChart = () => {
     return (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={100}>
             <BarChart
                 width={500}
                 height={300}
