@@ -360,6 +360,11 @@ export default function AnalyticsDashboard() {
     // return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Process data when raw data changes
   useEffect(() => {
     if (opticalData.length > 0) {
@@ -419,7 +424,7 @@ export default function AnalyticsDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Banner */}
-      <div className="relative bg-gradient-to-r from-rose-200 via-red-100 to-red-50 dark:from-gray-800 dark:via-red-900/20 dark:to-gray-800">
+      <div className="relative bg-gradient-to-r from-rose-200 via-red-100 to-red-50 dark:from-gray-800 dark:via-red-900/20 dark:to-gray-800 h-50">
         <div className="max-w-[1440px] mx-auto">
           <div className="px-8 pt-8 pb-28">
             <div className="flex items-center justify-between mb-12">
@@ -431,7 +436,15 @@ export default function AnalyticsDashboard() {
               <div className="flex items-center gap-2 text-sm bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
                 <Clock className="h-4 w-4 text-gray-600" />
                 <span className="text-gray-600">
-                  {currentTime.toLocaleTimeString()}
+                  {currentTime.toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  })}
                 </span>
               </div>
               <div className="flex items-center gap-3">
