@@ -1,11 +1,12 @@
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { PACKET_SIZE_LABELS } from '@/constants/labels';
 
 interface BrandCardProps {
   title: string;
   imageUrl: string;
   linkUrl?: string;
-  keys: string[];
+  keys: (keyof typeof PACKET_SIZE_LABELS)[];
   data: Record<string, number | undefined>;
 }
 
@@ -23,7 +24,7 @@ function BrandCard({ title, imageUrl, linkUrl, keys, data }: BrandCardProps) {
       <div className="flex flex-wrap gap-2 justify-center mb-2">
         {keys.map((key) => (
           <Badge key={key} variant="secondary">
-            {key.toUpperCase()} : {data[key] ?? '-'}
+            {PACKET_SIZE_LABELS[key]} : {data[key] ?? '-'}
           </Badge>
         ))}
       </div>

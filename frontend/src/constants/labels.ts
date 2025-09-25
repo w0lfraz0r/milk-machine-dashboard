@@ -26,18 +26,18 @@ export const BRAND_COLORS = {
 }
 
 export const BRAND_PACKET_SIZES = {
-    tonedMilk: ['one', 'half', 'six', 'small'],
-    shubham: ['one', 'half'],
-    nandiniSpecial: ['one', 'half'],
-    homogenisedCow: ['half'],
-    smrudhi: ['half'],
-    desiCow: ['half'],
+    tonedMilk: ['one', 'half', 'six', 'small'] as (keyof typeof PACKET_SIZE_LABELS)[],
+    shubham: ['one', 'half'] as (keyof typeof PACKET_SIZE_LABELS)[],
+    nandiniSpecial: ['one', 'half'] as (keyof typeof PACKET_SIZE_LABELS)[],
+    homogenisedCow: ['half'] as (keyof typeof PACKET_SIZE_LABELS)[],
+    smrudhi: ['half'] as (keyof typeof PACKET_SIZE_LABELS)[],
+    desiCow: ['half'] as (keyof typeof PACKET_SIZE_LABELS)[],
 }
 
 export const PACKET_SIZES = ['one', 'half', 'six', 'small'];
 
 export const PACKET_SIZE_LABELS = {
-    one : '1L',
+    one: '1L',
     half: '500ml',
     six: '6L',
     small: '200ml',
