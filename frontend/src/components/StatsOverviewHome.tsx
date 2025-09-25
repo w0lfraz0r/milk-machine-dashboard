@@ -24,7 +24,7 @@ const StatsOverviewHome = () => {
             <div className="grid grid-cols-[40%_30%_30%]  divide-x">
                 <div className="px-8 pt-2  pb-0">
                     <p className="text-sm font-medium text-gray-500">Total Milk Produced Today (in Litres)</p>
-                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 80 }}>
+                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 40}}>
                         <FlipNumbers
                             height={20}
                             width={30}
@@ -38,7 +38,7 @@ const StatsOverviewHome = () => {
                 </div>
                 <div className="px-8 pt-2 pb-0">
                     <p className="text-sm font-medium text-gray-500">Total Trays</p>
-                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 80 }}>
+                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 40}}>
                         <FlipNumbers
                             height={20}
                             width={30}
@@ -52,7 +52,7 @@ const StatsOverviewHome = () => {
                 </div>
                 <div className="px-8 pt-2  pb-0">
                     <p className="text-sm font-medium text-gray-500">Total Packets</p>
-                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 80 }}>
+                    <div className="mt-2 text-4xl font-semibold text-gray-900" style={{ minHeight: 40}}>
                         <FlipNumbers
                             height={20}
                             width={30}
