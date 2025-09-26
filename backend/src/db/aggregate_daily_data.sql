@@ -1,7 +1,7 @@
--- Drop the procedure if it exists
-DROP PROCEDURE IF EXISTS aggregate_daily_data;
+DELIMITER $$
 
--- Create the procedure
+DROP PROCEDURE IF EXISTS aggregate_daily_data$$
+
 CREATE PROCEDURE aggregate_daily_data(IN target_date DATE)
 BEGIN
   -- Optical Machine History
@@ -14,7 +14,6 @@ BEGIN
     SUM(counted_packets),
     'daily_job'
   FROM tabOpticalCount
-  -- Use creation as base date; alternatively use time_of_detection
   WHERE creation >= target_date
     AND creation < target_date + INTERVAL 1 DAY
   GROUP BY machine_id;
@@ -33,7 +32,7 @@ BEGIN
     AND creation < target_date + INTERVAL 1 DAY
   GROUP BY assembly_line;
 
-  -- Tray Conveyor History (conveyor == assembly line)
+  -- Tray Conveyor History
   INSERT INTO tabTrayHistoryByConveyor (
     conveyor_belt_number, day, total_identified_packets, calculated_by
   )
@@ -63,7 +62,7 @@ BEGIN
     AND creation < target_date + INTERVAL 1 DAY
   GROUP BY conveyor_belt_number, identified_color, type;
 
-  -- Integrity Check (logs warning if mismatch)
+  -- Integrity Check
   IF EXISTS (
     SELECT 1
     FROM (
@@ -83,4 +82,6 @@ BEGIN
     SIGNAL SQLSTATE '01000'
       SET MESSAGE_TEXT = 'WARNING: Tray totals mismatch between conveyor and color-type breakdown';
   END IF;
-END;
+END$$
+
+DELIMITER ;
