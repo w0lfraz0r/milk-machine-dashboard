@@ -1,0 +1,5 @@
+CREATE EVENT IF NOT EXISTS daily_aggregate_event
+ON SCHEDULE EVERY 1 DAY
+STARTS '2025-09-26 00:05:00'
+DO
+  CALL aggregate_daily_data(CURDATE() - INTERVAL 1 DAY);

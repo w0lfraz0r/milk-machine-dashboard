@@ -15,6 +15,13 @@
       "when": 1758703410712,
       "tag": "0001_magical_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1758800759638,
+      "tag": "0002_nasty_lorna_dane",
+      "breakpoints": true
     }
   ]
 }

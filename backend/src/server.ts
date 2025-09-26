@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import analyticsRoutes from "./routes/analytics";
+import statsRoutes from "./routes/stats";
 import { testConnection } from "./db/connection";
 
 config();
@@ -22,6 +23,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use("/api", analyticsRoutes);
+app.use("/api/stats", statsRoutes);
 
 // Root endpoint
 app.get("/", (req, res) => {

@@ -29,8 +29,12 @@ import {
   TrendingUp,
   Clock,
   Zap,
+  Car,
 } from "lucide-react";
 import StatsOverview from "./StatsOverview";
+import StatsOverviewHome from "./StatsOverviewHome";
+import AssemblyLinePacketsBarChart from "./AssemblyLinePacketsBarChart";
+import BrandCards from "./BrandCards";
 
 // API base URL - adjust according to your backend setup
 const API_BASE_URL = "http://localhost:3001/api";
@@ -208,6 +212,7 @@ export default function AnalyticsDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeTab, setActiveTab] = useState("home");
 
   // Fetch optical count data
   const fetchOpticalData = async () => {
@@ -355,6 +360,11 @@ export default function AnalyticsDashboard() {
     // return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Process data when raw data changes
   useEffect(() => {
     if (opticalData.length > 0) {
@@ -414,50 +424,86 @@ export default function AnalyticsDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Banner */}
-      <div className="relative bg-gradient-to-r from-rose-200 via-red-100 to-red-50 dark:from-gray-800 dark:via-red-900/20 dark:to-gray-800">
+      <div className="relative bg-gradient-to-r from-rose-200 via-red-100 to-red-50 dark:from-gray-800 dark:via-red-900/20 dark:to-gray-800 h-50">
         <div className="max-w-[1440px] mx-auto">
           <div className="px-8 pt-8 pb-28">
             <div className="flex items-center justify-between mb-12">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-red-500 flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">A</span>
+                <div className="h-10 px-2 py-2 rounded-lg flex items-center justify-center">
+                  <p className="text-black text-xl font-bold">Dashboard</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
                 <Clock className="h-4 w-4 text-gray-600" />
                 <span className="text-gray-600">
-                  Last updated: {currentTime.toLocaleTimeString()}
+                  {currentTime.toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  })}
                 </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-10 px-2 py-2 rounded-lg bg-red-500 flex items-center justify-center">
+                  <p className="text-black text-xl font-bold">Alerts</p>
+                </div>
               </div>
             </div>
             <div className="text-center max-w-2xl mx-auto">
               <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-                Good morning, Team!
+                Welcome to BAMUL Dashboard
               </h1>
-              <p className="text-gray-600">
-                Explore your team's latest production metrics to see how you're
-                driving results.
-              </p>
             </div>
           </div>
         </div>
 
         {/* Overlapping Stats Card */}
-        <div className="absolute left-0 right-0 -bottom-16">
+        <div className="absolute left-0 right-0 -bottom-12">
           <div className="max-w-[1440px] mx-auto px-8">
-            <StatsOverview />
+            <StatsOverviewHome />
+            {/* use hoc and activeTab to display appropraite stat card */}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-[1440px] mx-auto px-8 pt-28 pb-8">
-        <Tabs defaultValue="overview" className="space-y-8">
+      <div className="max-w-[1440px] mx-auto px-8 pt-15 pb-8">
+        <Tabs className="space-y-1" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-white p-1 rounded-lg shadow-sm">
+            <TabsTrigger value="home">Home</TabsTrigger>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="lines">Assembly Lines</TabsTrigger>
             <TabsTrigger value="trays">Tray Analysis</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="home" className="space-y-1">
+            {/* 6 brand cards */}
+            <Card className="hover:shadow-lg transition-shadow duration-300 pt-1">
+              <CardHeader className="py-0">
+                <CardTitle className="text-xl">
+                  Packet Wise Distribution
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BrandCards />
+              </CardContent>
+            </Card>
+            {/* assemly line thing */}
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Assembly line wise production - Today
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="justify-center items-center">
+                <AssemblyLinePacketsBarChart />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="hover:shadow-lg transition-shadow duration-300">
