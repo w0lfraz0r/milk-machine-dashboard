@@ -5,6 +5,7 @@ import {
   timestamp,
   varchar,
   tinyint,
+  mysqlView,
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 
@@ -72,8 +73,8 @@ export const tabOpticalHistoryByMachine = mysqlTable(
     machineId: int("machine_id").notNull(),
     day: timestamp("day", { mode: "date" }).notNull(),
     totalCount: int("total_count").notNull().default(0),
-    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).onUpdateNow(),
     calculatedBy: varchar("calculated_by", { length: 140 }),
   },
   (table) => ({
@@ -88,8 +89,8 @@ export const tabOpticalHistoryByAssembly = mysqlTable(
     assemblyLine: int("assembly_line").notNull(),
     day: timestamp("day", { mode: "date" }).notNull(),
     totalCount: int("total_count").notNull().default(0),
-    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).onUpdateNow(),
     calculatedBy: varchar("calculated_by", { length: 140 }),
   },
   (table) => ({
@@ -104,8 +105,8 @@ export const tabTrayHistoryByConveyor = mysqlTable(
     conveyorBeltNumber: int("conveyor_belt_number").notNull(),
     day: timestamp("day", { mode: "date" }).notNull(),
     totalIdentifiedPackets: int("total_identified_packets").notNull().default(0),
-    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).onUpdateNow(),
     calculatedBy: varchar("calculated_by", { length: 140 }),
   },
   (table) => ({
@@ -122,13 +123,56 @@ export const tabTrayHistoryByColorType = mysqlTable(
     type: varchar("type", { length: 140 }),
     day: timestamp("day", { mode: "date" }).notNull(),
     count: int("count").notNull().default(0),
-    createdAt: timestamp("created_at", { mode: "date"}).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date"}).onUpdateNow(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).onUpdateNow(),
     calculatedBy: varchar("calculated_by", { length: 140 }),
   },
   (table) => ({
     dayIdx: sql`INDEX \`day_color_type_idx\` (\`day\`, \`conveyor_belt_number\`, \`identified_color\`, \`type\`)`,
   })
+);
+
+
+// views for today's aggregated data
+export const vwOpticalTodayByMachine = mysqlView(
+  "vwOpticalTodayByMachine",
+  {
+    machineId: int("machine_id"),
+    day: timestamp("day", { mode: "date" }),
+    hour: int("hour"),
+    totalCount: int("total_count"),
+  }
+);
+
+export const vwOpticalTodayByAssembly = mysqlView(
+  "vwOpticalTodayByAssembly",
+  {
+    assemblyLine: int("assembly_line"),
+    day: timestamp("day", { mode: "date" }),
+    hour: int("hour"),
+    totalCount: int("total_count"),
+  }
+);
+
+export const vwTrayTodayByConveyor = mysqlView(
+  "vwTrayTodayByConveyor",
+  {
+    conveyorBeltNumber: int("conveyor_belt_number"),
+    day: timestamp("day", { mode: "date" }),
+    hour: int("hour"),
+    totalIdentifiedPackets: int("total_identified_packets"),
+  }
+);
+export const vwTrayTodayByColorType = mysqlView(
+  "vwTrayTodayByColorType",
+  {
+    conveyorBeltNumber: int("conveyor_belt_number"),
+    identifiedColor: varchar("identified_color", { length: 140 }),
+    type: varchar("type", { length: 140 }),
+    day: timestamp("day", { mode: "date" }),
+    hour: int("hour"),
+    count: int("count"),
+  }
 );
 
 
@@ -141,3 +185,32 @@ export type OpticalHistoryByMachineSelect = typeof tabOpticalHistoryByMachine.$i
 export type OpticalHistoryByAssemblySelect = typeof tabOpticalHistoryByAssembly.$inferSelect;
 export type TrayHistoryByConveyorSelect = typeof tabTrayHistoryByConveyor.$inferSelect;
 export type TrayHistoryByColorTypeSelect = typeof tabTrayHistoryByColorType.$inferSelect;
+
+export type OpticalTodayByMachineSelect = {
+  machineId: number;
+  day: Date;
+  hour: number;
+  totalCount: number;
+};
+export type OpticalTodayByAssemblySelect = {
+  assemblyLine: number;
+  day: Date;
+  hour: number;
+  totalCount: number;
+};
+
+export type TrayTodayByConveyorSelect = {
+  conveyorBeltNumber: number;
+  day: Date;
+  hour: number;
+  totalIdentifiedPackets: number;
+};
+
+export type TrayTodayByColorTypeSelect = {
+  conveyorBeltNumber: number;
+  identifiedColor: string | null;
+  type: string | null;
+  day: Date;
+  hour: number;
+  count: number;
+};
